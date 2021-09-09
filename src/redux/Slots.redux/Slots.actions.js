@@ -1,13 +1,19 @@
 const { setProcessingGetSlots } = require('../actions');
 
 // get slots by language and day
-const getSlotsByDayAndLanguage = (day, language) => async (dispatch) => {
-  dispatch(setProcessingGetSlots(true));
+export const getSlotsByDayAndLanguage =
+  ({ day, language }) =>
+  async (dispatch) => {
+    dispatch(setProcessingGetSlots(true));
 
-  const options = {};
+    console.log('In getSlotsByDayAndLanguage', { day, language });
 
-  try {
-  } catch (err) {
-    dispatch(setProcessingGetSlots(false));
-  }
-};
+    const options = {};
+    // make call to backend to get slots based on day and language
+
+    try {
+      dispatch(setProcessingGetSlots(false));
+    } catch (err) {
+      dispatch(setProcessingGetSlots(false));
+    }
+  };

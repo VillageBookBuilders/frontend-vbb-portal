@@ -113,12 +113,10 @@ export const logInEmailPassword = (history) => async (dispatch, getState) => {
   }
 
   try {
-    const { accessToken, 
+    const {
+      accessToken,
       //refreshToken
-    } = await getTokenFromEmailPassword(
-      email,
-      password
-    );
+    } = await getTokenFromEmailPassword(email, password);
     const user = await getUserFromAuthToken(accessToken);
 
     //@todo: add access token to cookie
@@ -168,5 +166,6 @@ const transformUser = (userAPI) => {
     lastName: last_name,
     email: email,
     externalId: external_id,
+    timeZone: 'Hard coded/Change me',
   };
 };

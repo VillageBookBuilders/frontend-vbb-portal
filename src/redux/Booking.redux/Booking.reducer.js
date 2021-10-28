@@ -1,6 +1,4 @@
-import moment from 'moment';
-import 'moment-timezone';
-
+import { getUTCTimeNow } from '../../util/timezoneHelpers';
 import {
   MENTOR_CHANGE,
   COMMIT_CHANGE,
@@ -15,7 +13,7 @@ const BookingInitialState = {
   libraries: [],
   languages: [],
   times: [],
-  time_zone: moment.tz.guess(),
+  time_zone: getUTCTimeNow(),
   language: '',
   weekday: '',
   displayDay: '',

@@ -166,6 +166,6 @@ const transformUser = (userAPI) => {
     lastName: last_name,
     email: email,
     externalId: external_id,
-    timeZone: 'Hard coded/Change me',
+    timeZone: 'America/Los_Angeles',
   };
 };

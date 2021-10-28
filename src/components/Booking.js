@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { DateTime } from 'luxon';
 
-import moment from 'moment';
-import 'moment-timezone';
 import { Checkbox, Select } from 'antd';
 import { Option } from 'antd/lib/mentions';
 import * as actions from '../redux/actions';
@@ -11,6 +8,7 @@ import menteeComputer from '../images/vbb-mentee-computer.png';
 
 import { SUPPORTED_MENTORING_LANGUAGES, WEEK_DAYS } from '../util/constants';
 import { SearchableTimeZoneSelection } from './TimeZoneSelect';
+import { getLocalTime } from '../util/timezoneHelpers';
 
 const languageOptions = SUPPORTED_MENTORING_LANGUAGES.map((language, index) => (
   <Option key={`${language}-${index}`} value={language}>
@@ -55,8 +53,7 @@ const initalState = {
 // we need to track what are the Program slots available.
 const BookingV2 = ({ user, getSlotsByDayAndLanguage }) => {
   const [sessionSelection, setSessionSelection] = useState(initalState);
-  const timeZone = user.timeZone || '';
-
+  const timeZone = user.timeZone || 'America/New_York';
   return (
     <div className="twocol-container">
       <h1 id="booking-header">Book Your Weekly Mentoring Session Below!</h1>
@@ -115,7 +112,7 @@ const BookingV2 = ({ user, getSlotsByDayAndLanguage }) => {
       </div>
       <div>
         <label for="select-start-time">
-          Your mentor session will start at:{' '}
+          Your mentor session is 1 hour long and will start at:{' '}
         </label>
         <p>Converted to your local time zone: {timeZone}</p>
         <Select
@@ -123,13 +120,6 @@ const BookingV2 = ({ user, getSlotsByDayAndLanguage }) => {
           placeholder="Select a session start time"
         >
           {startTimes}
-        </Select>
-      </div>
-      <div>
-        <label for="select-end-time">Your mentor session will end at: </label>
-        <p>Converted to your local time zone: {timeZone}</p>
-        <Select id="select-end-time" placeholder="Select a session end time">
-          {endTimes}
         </Select>
       </div>
     </div>

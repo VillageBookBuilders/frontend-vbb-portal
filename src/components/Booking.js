@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 
-import { Checkbox, Select } from 'antd';
+import { Select } from 'antd';
 import { Option } from 'antd/lib/mentions';
 import * as actions from '../redux/actions';
-import menteeComputer from '../images/vbb-mentee-computer.png';
 
 import { SUPPORTED_MENTORING_LANGUAGES, WEEK_DAYS } from '../util/constants';
 import { SearchableTimeZoneSelection } from './TimeZoneSelect';
@@ -21,11 +20,13 @@ const dayOfWeekOptions = WEEK_DAYS.map((day) => (
   </Option>
 ));
 
-const programLocations = [].map((program) => (
-  <Option key={`${program.value}-${program.display}`} value={program.value}>
-    {program.display}
-  </Option>
-));
+const programLocations = (programs) => {
+  return programs.map((program) => (
+    <Option key={`${program.id}`} value={program.id}>
+      {program.name}
+    </Option>
+  ));
+};
 
 const startTimes = [].map((startTime) => (
   <Option
@@ -45,15 +46,38 @@ const endTimes = [].map((endTime) => (
 const initalState = {
   language: '',
   dayOfWeek: '',
-  programLocation: '',
+  programLocationId: '',
   startTime: '',
   endTime: '',
 };
 
 // we need to track what are the Program slots available.
-const BookingV2 = ({ user, getSlotsByDayAndLanguage }) => {
+// TODO:
+// * return slot choices where the program and day of the week match the selected values
+// Slots that should show = slot.computer.program.id === programLocationId slot.language === language && slot.start_day_of_the_week < dayOfWeek && slot.end_day_of_the_week > dayOfWeek
+const BookingV2 = ({ user, getSlots, slots, programs, getAllPrograms }) => {
   const [sessionSelection, setSessionSelection] = useState(initalState);
   const timeZone = user.timeZone || 'America/New_York';
+  const filteredPrograms = !sessionSelection.language
+    ? programs
+    : programs.filter((program) => {
+        const language = sessionSelection.language;
+        return (
+          program.required_languages.toLowerCase() === language.toLowerCase() ||
+          program.secondary_languages.toLowerCase() === language.toLowerCase()
+        );
+      });
+  useEffect(() => {
+    getAllPrograms();
+  }, []);
+
+  const getAllSlots = ({ programLocationId, language, dayOfWeek }) => {
+    // day of week can be 0-6 so !!0 will be false
+    if (!!language && !!programLocationId && (!!dayOfWeek || dayOfWeek === 0)) {
+      getSlots({ programLocationId, language, dayOfWeek });
+    }
+  };
+
   return (
     <div className="twocol-container">
       <h1 id="booking-header">Book Your Weekly Mentoring Session Below!</h1>
@@ -66,16 +90,14 @@ const BookingV2 = ({ user, getSlotsByDayAndLanguage }) => {
         <Select
           id="select-language"
           value={sessionSelection.language || 'Select a language'}
-          onSelect={(e, option) => {
-            setSessionSelection({ ...sessionSelection, language: e });
-
-            if (option.value !== '' && sessionSelection.dayOfWeek !== '') {
-              // setSessionSelection is async so you need to reference the option instead of the state
-              getSlotsByDayAndLanguage({
-                day: sessionSelection.dayOfWeek,
-                language: option.value,
-              });
-            }
+          onSelect={(e) => {
+            const updatedSessionSelection = {
+              ...sessionSelection,
+              language: e,
+              programLocationId: '',
+            };
+            setSessionSelection(updatedSessionSelection);
+            getAllSlots(updatedSessionSelection);
           }}
         >
           {languageOptions}
@@ -86,16 +108,13 @@ const BookingV2 = ({ user, getSlotsByDayAndLanguage }) => {
         <Select
           id="select-day"
           value={sessionSelection.dayOfWeek || 'Select a day'}
-          onSelect={(e, option) => {
-            setSessionSelection({ ...sessionSelection, dayOfWeek: e });
-
-            if (sessionSelection.language !== '' && option.value !== '') {
-              // setSessionSelection is async so you need to reference the option instead of the state
-              getSlotsByDayAndLanguage({
-                day: option.value,
-                language: sessionSelection.language,
-              });
-            }
+          onSelect={(e) => {
+            const updatedSessionSelection = {
+              ...sessionSelection,
+              dayOfWeek: e,
+            };
+            setSessionSelection(updatedSessionSelection);
+            getAllSlots(updatedSessionSelection);
           }}
         >
           {dayOfWeekOptions}
@@ -105,9 +124,23 @@ const BookingV2 = ({ user, getSlotsByDayAndLanguage }) => {
         <label for="select-program-location">Your mentee will be at: </label>
         <Select
           id="select-program-location"
-          placeholder="Select a program location"
+          value={
+            (!!filteredPrograms.length
+              ? sessionSelection.programLocationId
+              : 'No programs match your language selection') ||
+            'Select a program location'
+          }
+          onSelect={(e) => {
+            //e will be the programId
+            const updatedSessionSelection = {
+              ...sessionSelection,
+              programLocationId: e,
+            };
+            setSessionSelection(updatedSessionSelection);
+            getAllSlots(updatedSessionSelection);
+          }}
         >
-          {programLocations}
+          {programLocations(filteredPrograms)}
         </Select>
       </div>
       <div>
@@ -127,6 +160,6 @@ const BookingV2 = ({ user, getSlotsByDayAndLanguage }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { user: state.user };
+  return { user: state.user, programs: state.programs, slots: state.slots };
 };
 export default connect(mapStateToProps, actions)(BookingV2);

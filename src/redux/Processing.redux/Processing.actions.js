@@ -3,6 +3,7 @@ export const SET_PROCESSING_REGISTRATION = 'SET_PROCESSING_REGISTRATION';
 export const SET_PROCESSING_NEWSLETTER_SIGNUP =
   'SET_PROCESSING_NEWSLETTER_SIGNUP';
 export const SET_PROCESSING_GET_SLOTS = 'SET_PROCESSING_GET_SLOTS';
+export const SET_PROCESSING_GET_PROGRAMS = 'SET_PROCESSING_GET_PROGRAMS';
 
 /**
  * Sets login processing state.
@@ -48,4 +49,14 @@ export const setProcessingNewsletterSignup = (processingNewsletterSignup) => {
  */
 export const setProcessingGetSlots = (processingSlots) => {
   return { type: SET_PROCESSING_GET_SLOTS, payload: processingSlots };
+};
+
+/**
+ * Sets getting programs processing state.
+ *
+ * @param {boolean} processingGetPrograms boolean value
+ * @returns action
+ */
+export const setProcessingGetPrograms = (processingGetPrograms) => {
+  return { type: SET_PROCESSING_GET_PROGRAMS, payload: processingGetPrograms };
 };

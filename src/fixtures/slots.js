@@ -1,7 +1,5 @@
 import { computerHanoi } from './computers';
 
-export const allTestSlots = [hanoiSlot1, hanoiSlot2, hanoiSlot3];
-
 // currently all 1 hour time slots
 export const hanoiSlot1 = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
@@ -28,8 +26,8 @@ export const hanoiSlot1 = {
 
 export const hanoiSlot2 = {
   id: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-  start_day_of_the_week: 1,
-  end_day_of_the_week: 1,
+  start_day_of_the_week: 2,
+  end_day_of_the_week: 2,
   start_hour: 13,
   start_minute: 0,
   end_hour: 14,
@@ -71,3 +69,5 @@ export const hanoiSlot3 = {
   is_mentor_assigned: false,
   is_student_assigned: true,
 };
+
+export const allTestSlots = [hanoiSlot1, hanoiSlot2, hanoiSlot3];

@@ -15,3 +15,4 @@ export * from '../Newsletter.redux/Newsletter.actions';
 export * from '../Booking.redux/Booking.action';
 export * from '../Processing.redux/Processing.actions';
 export * from '../Slots.redux/Slots.actions';
+export * from '../Programs.redux/Programs.action';

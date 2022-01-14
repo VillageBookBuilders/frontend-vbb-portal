@@ -1,33 +1,21 @@
+import { Form, Select } from 'antd';
 import React from 'react';
 import { connect } from 'react-redux';
+
 import * as actions from '../../../redux/actions';
-import { Form, Select } from 'antd';
-import moment from 'moment-timezone';
+import { SearchableTimeZoneSelection } from '../../TimeZoneSelect';
 
 const TimeZone = ({ registrationForm, setRegistrationForm }) => {
-  const { Option } = Select;
+  const handleSelect = (e) => {
+    const updatedRegForm = {
+      ...registrationForm,
+      timeZone: e,
+    };
+    setRegistrationForm(updatedRegForm);
+  };
   return (
     <Form.Item label="What timezone are you in">
-      <Select
-        value={registrationForm.timeZone}
-        onChange={(e) => {
-          const updatedRegForm = {
-            ...registrationForm,
-            timeZone: e,
-          };
-          setRegistrationForm(updatedRegForm);
-        }}
-      >
-        {/* Need to update timezone drop downs */}
-        {moment.tz.names().map((tz) => {
-          if (tz.includes('Etc/GMT')) return null;
-          return (
-            <Option key={tz} value={tz}>
-              {tz}
-            </Option>
-          );
-        })}
-      </Select>
+      <SearchableTimeZoneSelection handleSelect={handleSelect} />
     </Form.Item>
   );
 };

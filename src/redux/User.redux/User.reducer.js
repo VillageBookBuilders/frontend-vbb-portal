@@ -10,7 +10,7 @@ const userInitialState = {
   firstName: '',
   lastName: '',
   dateOfBirth: '',
-  timezone: '',
+  timeZone: '',
   phone: '',
   city: '',
   languages: '',

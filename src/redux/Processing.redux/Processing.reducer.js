@@ -1,4 +1,6 @@
 import {
+  SET_PROCESSING_GET_PROGRAMS,
+  SET_PROCESSING_GET_SLOTS,
   SET_PROCESSING_LOGIN,
   SET_PROCESSING_NEWSLETTER_SIGNUP,
   SET_PROCESSING_REGISTRATION,
@@ -8,6 +10,8 @@ const processingInitialState = {
   login: false,
   registration: false,
   newsletterSignup: false,
+  getSlots: false,
+  getPrograms: false,
 };
 
 /**
@@ -28,6 +32,11 @@ export const processing = (state = processingInitialState, action) => {
       return { ...state, registration: action.payload };
     case SET_PROCESSING_NEWSLETTER_SIGNUP:
       return { ...state, newsletterSignup: action.payload };
+    case SET_PROCESSING_GET_SLOTS:
+      return { ...state, getSlots: action.payload };
+    case SET_PROCESSING_GET_PROGRAMS:
+      return { ...state, getPrograms: action.payload };
+
     default:
       return state;
   }

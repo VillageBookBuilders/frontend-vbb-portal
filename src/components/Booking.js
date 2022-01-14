@@ -36,6 +36,19 @@ const startTimes = [].map((startTime) => (
     {startTime.display}
   </Option>
 ));
+// const startTimeOptions = (slots) => {
+//   return slots.map((slot) => {
+//     const startTime = slot.startTime;
+//     return (
+//       <Option
+//         key={`${startTime.value}-${startTime.display}`}
+//         value={startTime.value}
+//       >
+//         {startTime.display}
+//       </Option>
+//     );
+//   });
+// };
 
 const endTimes = [].map((endTime) => (
   <Option key={`${endTime.value}-${endTime.display}`} value={endTime.value}>
